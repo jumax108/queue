@@ -170,6 +170,8 @@ bool CQueue<T>::_pop(
 		_data[_front].popLog(file, line);
 	#endif
 
+	_data[_front]._data.~T();
+
 	_front = (_front + 1) % _capacity;
 	_size -= 1;
 
