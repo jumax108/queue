@@ -54,18 +54,9 @@ private:
 
 	HANDLE _heap;
 
-		struct stNode{
-
+	struct stNode{
+		friend class CQueue;
 	public:
-		inline stNode(T& data){
-			_data = data;
-			#if defined(QUEUE_LOG)
-				_pushFile = nullptr;
-				_pushLine = 0;
-				_popFile  = nullptr;
-				_popFile  = 0;
-			#endif
-		}
 		#if defined(QUEUE_LOG)
 			inline void pushLog(const wchar_t* file, int line){
 				_pushFile = (wchar_t*)file;
@@ -142,7 +133,7 @@ bool CQueue<T>::_push(T in
 	}
 
 	stNode* node = &_data[_rear];
-	new (node) stNode(in);
+	new (&node->_data) T(in);
 
 	#if defined(QUEUE_LOG)
 		node->pushLog(file, line);
@@ -186,7 +177,7 @@ bool CQueue<T>::front(T* out) {
 		return false;
 	}
 
-	*out = _data[_front];
+	*out = _data[_front]._data;
 
 	return true;
 
